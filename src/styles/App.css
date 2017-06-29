@@ -1,0 +1,128 @@
+*, *:before, *:after {
+  box-sizing: border-box; }
+
+html {
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+h2, h3 {
+  user-select: none;
+  color: #16a085;
+  font-weight: normal; }
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+.WeekView {
+  display: flex;
+  flex-direction: column; }
+  .WeekView .headerWrapper {
+    flex: 0 1 auto;
+    width: 100%;
+    position: fixed;
+    z-index: 10;
+    background: #fff;
+    height: 6.5rem; }
+    .WeekView .headerWrapper:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 5rem;
+      right: 0;
+      border-bottom: solid 1px #bdc3c7; }
+    .WeekView .headerWrapper h2 {
+      padding-left: 5rem; }
+    .WeekView .headerWrapper ul.dayLabels {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin-left: 5rem; }
+      .WeekView .headerWrapper ul.dayLabels li {
+        flex: 1 1 0;
+        color: #34495e; }
+        .WeekView .headerWrapper ul.dayLabels li span {
+          user-select: none;
+          font-size: 1.2rem; }
+          .WeekView .headerWrapper ul.dayLabels li span + span {
+            padding-left: .5rem; }
+  .WeekView .gridWrapper {
+    flex: 1 1 auto;
+    width: 100%;
+    margin-top: 6.5rem; }
+    .WeekView .gridWrapper ul.timeGrid {
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 0; }
+      .WeekView .gridWrapper ul.timeGrid li {
+        position: relative; }
+        .WeekView .gridWrapper ul.timeGrid li + li {
+          border-top: solid 1px #bdc3c7; }
+        .WeekView .gridWrapper ul.timeGrid li:after {
+          content: '';
+          position: absolute;
+          left: 5rem;
+          right: 0;
+          top: calc(50% - .5px);
+          border-top: solid 1px #e6e9ea; }
+        .WeekView .gridWrapper ul.timeGrid li .timeLabel {
+          display: inline-block;
+          width: 5rem;
+          color: #7f8c8d;
+          background: #fff;
+          position: relative;
+          transform: translateY(-60%);
+          text-align: right;
+          padding-right: 1rem;
+          user-select: none; }
+    .WeekView .gridWrapper .dayColumnsWrapper {
+      position: relative;
+      z-index: 1;
+      margin-left: 5rem;
+      display: flex; }
+
+.DayView {
+  user-select: none;
+  position: relative;
+  height: 100%;
+  flex: 1 1 auto;
+  border-right: solid 1px #bdc3c7; }
+  .DayView:last-child {
+    border-right: none; }
+
+.MeetingSegment {
+  position: absolute;
+  user-select: none;
+  cursor: move;
+  user-drag: none;
+  user-select: none; }
+  .MeetingSegment .bg {
+    opacity: .3;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: calc(100% - 3px); }
+  .MeetingSegment .details {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    padding: 3%;
+    border-left-style: solid;
+    border-left-width: 2px;
+    overflow: hidden; }
+    .MeetingSegment .details li {
+      padding: 0 .5rem .5rem 0;
+      text-align: center; }
+    .MeetingSegment .details .title {
+      font-size: .9em;
+      word-wrap: break-word; }
+    .MeetingSegment .details .time, .MeetingSegment .details .day {
+      font-size: 1em; }
+    .MeetingSegment .details .time {
+      padding-bottom: .25rem; }
+  .MeetingSegment.selected .bg {
+    opacity: .7; }

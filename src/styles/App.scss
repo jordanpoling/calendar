@@ -1,0 +1,173 @@
+@import './colors.scss';
+
+*, *:before, *:after{
+  box-sizing: border-box;
+}
+
+html{
+	box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h2, h3{
+  user-select: none;
+  color: $greensea;
+  font-weight: normal;
+}
+
+ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.WeekView{
+  display: flex;
+  flex-direction: column;
+  $headerHeight: 6.5rem;
+  $sideWidth: 5rem;
+
+  .headerWrapper{
+    flex: 0 1 auto;
+    width: 100%;
+    position: fixed;
+    z-index: 10;
+    background: #fff;
+    height: $headerHeight;
+    &:after{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: $sideWidth;
+      right: 0;
+      border-bottom: solid 1px $silver;
+    }
+
+    h2{
+      padding-left: $sideWidth;
+    }
+
+    ul.dayLabels{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin-left: $sideWidth;
+      li{
+        flex: 1 1 0;
+        color: $wetasphalt;
+        span{
+          user-select: none;
+          font-size: 1.2rem;
+          &+span{
+            padding-left: .5rem;
+          }
+        }
+      }
+    }
+  }
+
+  .gridWrapper{
+    flex: 1 1 auto;
+    width: 100%;
+    margin-top: $headerHeight;
+
+    ul.timeGrid{
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 0;
+
+      li{
+        position: relative;
+        &+li{
+          border-top: solid 1px $silver;
+        }
+        &:after{
+          content: '';
+          position: absolute;
+          left: $sideWidth;
+          right: 0;
+          top: calc(50% - .5px);
+          border-top: solid 1px lighten($silver, 15%);
+        }
+        .timeLabel{
+          display: inline-block;
+          width: $sideWidth;
+          color: $asbestos;
+          background: #fff;
+          position:relative;
+          transform: translateY(-60%);
+          text-align: right;
+          padding-right: 1rem;
+          user-select: none;
+        }
+      }
+    }
+
+    .dayColumnsWrapper{
+      position: relative;
+      z-index: 1;
+      margin-left: $sideWidth;
+      display: flex;
+    }
+  }
+}
+
+.DayView{
+  user-select: none;
+  position: relative;
+  height: 100%;
+  flex: 1 1 auto;
+  border-right: solid 1px $silver;
+
+  &:last-child{
+    border-right: none;
+  }
+}
+
+.MeetingSegment{
+  position: absolute;
+  user-select: none;
+  cursor: move;
+  user-drag: none;
+  user-select: none;
+
+  .bg{
+    opacity: .3;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: calc(100% - 3px);
+  }
+  .details{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    padding: 3%;
+    border-left-style: solid;
+    border-left-width: 2px;
+    overflow: hidden;
+    li{
+      padding: 0 .5rem .5rem 0;
+      text-align: center;
+    }
+    .title{
+      font-size: .9em;
+      word-wrap: break-word;
+    }
+    .time, .day{
+      font-size: 1em;
+    }
+    .time{
+      padding-bottom: .25rem;
+    }
+  }
+
+  &.selected{
+    .bg{
+      opacity: .7
+    }
+  }
+}
