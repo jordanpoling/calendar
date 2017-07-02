@@ -70,7 +70,7 @@ class WeekView extends Component {
     })
   }
 
-  unselectMeeting() {
+  unselectMeeting(e) {
     this.setState({
       selectedMeetingId: null,
     })
@@ -114,29 +114,9 @@ class WeekView extends Component {
     meeting.end = new Date(newEndTime)
     meeting.daysIdx = newDaysIdx
 
-    // We can't use this directly or it will create all new elements,
-    // breaking the drag action, so will just use as guide
-    const segmentsGuide = _segmentMeetingsByDay({[meetingId]: meeting}, weekSize)
-
-    segmentsGuide.forEach((segsDay, dayIdx) => {
-      const segGuide = segsDay[meetingId]
-      if (segGuide) {
-        let origSeg = meetingSegmentsByDay[dayIdx][meetingId]
-        // If segment exists in that day, update it, otherwise copy from guide
-        if (origSeg) {
-          origSeg.top = segGuide.top
-          origSeg.btm = segGuide.btm
-        }  else {
-          meetingSegmentsByDay[dayIdx][meetingId] = segGuide
-        }
-      } else {
-        delete meetingSegmentsByDay[dayIdx][meetingId]
-      }
-    })
-
     this.setState({
       meetings,
-      meetingSegmentsByDay,
+      meetingSegmentsByDay: _segmentMeetingsByDay(meetings, weekSize),
       prevDMins: dMins
     })
   }
@@ -159,9 +139,12 @@ class WeekView extends Component {
     const year = weekStart.getFullYear()
 
     return (
-      <div className='WeekView'>
+      <div
+        className='WeekView'
+        onMouseUp={this.endDragMeeting}
+        onClick={this.unselectMeeting}>
 
-        <div className='headerWrapper' onClick={this.unselectMeeting}>
+        <div className='headerWrapper'>
           <h2>
             {monthName} {year}
           </h2>
@@ -179,14 +162,13 @@ class WeekView extends Component {
         <div
           className='gridWrapper'
           onMouseMove={this.dragMeeting}
-          onMouseUp={this.endDragMeeting}
-        >
+          >
           <ul className='timeGrid'>
             {this.timeLabels.map((label, idx) =>
               <li
                 key={idx}
                 style={{height: hourHeight}}
-              >
+                >
                 <div className='timeLabel'>
                   {idx > 0 && label}
                 </div>

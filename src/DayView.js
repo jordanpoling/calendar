@@ -17,7 +17,7 @@ const DayView = ({
     <div
       className='DayView'
       style={{height: hourHeight * 24}}
-    >
+      >
       {Object.entries(segments).map(([meetingId, segment]) => {
         const meeting = meetings[meetingId]
         const selected = selectedMeetingId === meetingId
@@ -28,6 +28,7 @@ const DayView = ({
             className={cx('MeetingSegment', { selected })}
             key={meetingId}
             onMouseDown={onSelectMeeting.bind(null, meeting, segment)}
+            onClick={(e) => e.stopPropagation()}
             style={{
               zIndex: selected ? 2 : 1,
               width: (draggingMe ? 1 : segment.width) * dayWidth,
@@ -35,7 +36,7 @@ const DayView = ({
               left: draggingMe ? 0 : segment.left * dayWidth,
               top: minuteHeight * segment.top
             }}
-          >
+            >
             <div
               className='bg'
               style={{backgroundColor: meeting.color}}
@@ -46,7 +47,7 @@ const DayView = ({
                 color: selected ? '#fff' : meeting.color,
                 borderLeftColor: meeting.color
               }}
-            >
+              >
               {segment.btm - segment.top > 60 &&
                 <ul>
                   <li className='title'>
