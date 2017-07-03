@@ -226,8 +226,8 @@ function _makeTimeLabels() {
 function _makeDayLabels(weekStart, weekSize) {
   const labels = []
   for (let i = 0; i < weekSize; i++) {
-    const d = new Date()
-    d.setDate(weekStart.getDate() + i)
+    const d = new Date(weekStart)
+    d.setDate(d.getDate() + i)
     labels.push({
       name: dayNamesShort[d.getDay()],
       num: d.getDate(),
