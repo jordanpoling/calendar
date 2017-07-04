@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/index.css';
-import colors from './constants/colors.js'
+import { colors } from './constants'
 import WeekView from './WeekView.js'
 
 const ids = new Array(10).fill(1).map(() =>

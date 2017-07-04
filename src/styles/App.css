@@ -91,6 +91,13 @@ ul {
   border-right: solid 1px #bdc3c7; }
   .DayView:last-child {
     border-right: none; }
+  .DayView .clash {
+    position: absolute;
+    /*background-color: rgba(255, 0, 0, .2);*/
+    border: solid 3px red;
+    border-left: none;
+    border-right: none;
+    z-index: 10; }
 
 .MeetingSegment {
   position: absolute;
@@ -98,6 +105,16 @@ ul {
   cursor: move;
   user-drag: none;
   user-select: none; }
+  .MeetingSegment .edge {
+    position: absolute;
+    z-index: 5;
+    height: .5rem;
+    width: 100%;
+    cursor: row-resize; }
+    .MeetingSegment .edge.top {
+      top: 0; }
+    .MeetingSegment .edge.bottom {
+      bottom: 0; }
   .MeetingSegment .bg {
     opacity: .3;
     position: absolute;

@@ -58,10 +58,17 @@ class WeekView extends Component {
     })
   }
 
-  selectMeeting(meeting, segment, e) {
+  createMeeting(title, date, color) {
+
+  }
+
+  selectMeeting(meeting, segment, dragType, e) {
+    e.stopPropagation()
+
     this.setState({
       selectedMeetingId: meeting.id,
       dragging: meeting.id,
+      dragType,
       origDayIdx: segment.dayIdx,
       origY: e.clientY,
       prevDMins: 0,
@@ -80,7 +87,7 @@ class WeekView extends Component {
     if (!this.state.dragging) return
 
     const { clientX, clientY } = e
-    const { origDayIdx, origY, prevDMins, origMeetingStart, origMeetingEnd, dayWidth } = this.state
+    const { origDayIdx, origY, prevDMins, origMeetingStart, origMeetingEnd, dayWidth, dragType } = this.state
     const { left: gridX } = this.refs.dayColumns.getBoundingClientRect()
     const vInterval = snapToMinutes * hourHeight / 60
     const dMinsIntra = Math.round((clientY - origY) / vInterval) * snapToMinutes
@@ -90,19 +97,31 @@ class WeekView extends Component {
     if (dMins - prevDMins === 0) return
 
     const { weekStart, weekSize } = this.props
-    const { selectedMeetingId, meetings, meetingSegmentsByDay } = this.state
+    const { selectedMeetingId, meetings } = this.state
 
-    const meetingId = selectedMeetingId
-    const meeting = meetings[meetingId]
+    const meeting = meetings[selectedMeetingId]
 
     const weekStartTime = weekStart.getTime()
-    const newStartTime = origMeetingStart.getTime() + (dMins * 60000)
-    const newEndTime = origMeetingEnd.getTime() + (dMins * 60000)
+
+    let newStartTime = origMeetingStart
+    let newEndTime = origMeetingEnd
+
+    if (dragType === 'move' || dragType === 'changeStart') {
+      newStartTime = origMeetingStart.getTime() + (dMins * 60000)
+    }
+
+    if (dragType === 'move' || dragType === 'changeEnd') {
+      newEndTime = origMeetingEnd.getTime() + (dMins * 60000)
+    }
 
     const newStartDayIdx = Math.floor((newStartTime - weekStartTime) / 86400000)
     const newEndDayIdx = Math.floor((newEndTime - weekStartTime) / 86400000)
 
-    if (newEndDayIdx < 0 || newStartDayIdx > weekSize) return
+    if (newEndDayIdx < 0 ||
+      newStartDayIdx > weekSize ||
+      newStartTime >= newEndTime ||
+      (dragType === 'changeStart' && newStartDayIdx < 0) ||
+      (dragType === 'changeEnd' && newEndDayIdx >= weekSize)) return
 
     const newDaysIdx = []
 
@@ -141,8 +160,8 @@ class WeekView extends Component {
     return (
       <div
         className='WeekView'
-        onMouseUp={this.endDragMeeting}
-        onClick={this.unselectMeeting}>
+        onClick={this.unselectMeeting}
+        >
 
         <div className='headerWrapper'>
           <h2>
@@ -187,6 +206,7 @@ class WeekView extends Component {
                 selectedMeetingId={selectedMeetingId}
                 dragging={dragging}
                 onSelectMeeting={this.selectMeeting}
+                dayIdx={dayIdx}
               />
             )}
           </div>

@@ -14,6 +14,8 @@ function _fitSegment(seg) {
       curGroup.columnBtms[j] = seg.btm
       if (seg.btm > curGroup.groupBtm) curGroup.groupBtm = seg.btm
       fits = true
+    } else if (seg.colsSpan > 0) {
+      return true
     }
   }
   return fits
